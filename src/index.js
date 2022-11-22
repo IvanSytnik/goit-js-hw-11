@@ -1,12 +1,13 @@
 import './sass/index.scss';
-const BASE_URL = "https://pixabay.com/api/";
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 import axios from 'axios';
-const gallery = document.querySelector(".gallery");
 import Notiflix from 'notiflix';
+const gallery = document.querySelector(".gallery");
+const BASE_URL = "https://pixabay.com/api/";
 const form = document.querySelector("form");
 let page = 1;
 const moreBtn = document.querySelector('.load-more')
-
 let searchName = null;
 form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -49,7 +50,7 @@ function createBlock(photos) {
     else {
         const list = photos.hits.map(photo => 
             `<div class='photo-card'>
-            <a href='${photo.largeImageURL}'>
+            <a  href='${photo.largeImageURL}'>
               <img src='${photo.webformatURL}' alt='${photo.tags}}' loading='lazy' />
             </a>
             <div class='info'>
@@ -73,6 +74,8 @@ function createBlock(photos) {
           </div>`
         ).join(""); 
         gallery.insertAdjacentHTML("beforeend", list);
+        const lightbox = new SimpleLightbox('.photo-card a', { /* options */ });
+
         if(photos.totalHits < (page -1)*40 ) {
             Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
             moreBtn.classList.add("is-hidden");
